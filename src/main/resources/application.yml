@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: postgres://ihxrsopk:xA7dsvddVv80Q7E1tdudLRW1lJQFyUIq@rain.db.elephantsql.com/ihxrsopk
+    url: jdbc:postgresql://rain.db.elephantsql.com:5432/ihxrsopk
     username: ihxrsopk
     password: xA7dsvddVv80Q7E1tdudLRW1lJQFyUIq
     driver-class-name: org.postgresql.Driver
