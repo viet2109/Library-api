@@ -1,11 +1,12 @@
 spring:
   datasource:
-#    url: jdbc:postgresql://localhost:5432/jwt_security
-#    username: postgres
-#    password: Duyvu.12
-    url: jdbc:postgresql://rain.db.elephantsql.com:5432/pruynxkf
-    username: pruynxkf
-    password: yufa0VuvO8GBVtscJfw-F4GvAGy2HJp9
+
+    url: jdbc:postgresql://dpg-cjh1sob6fquc73c1hep0-a.singapore-postgres.render.com:5432/nlu_api
+    username: nlu_api_user
+    password: ZdNyiJOvCmXADl6UALzlAOw0IYP1lxKg
+#    url: jdbc:postgresql://rain.db.elephantsql.com:5432/pruynxkf
+#    username: pruynxkf
+#    password: yufa0VuvO8GBVtscJfw-F4GvAGy2HJp9
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

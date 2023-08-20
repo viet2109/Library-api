@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.matcha</groupId>
     <artifactId>NLULibrary</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>NLULibrary</name>
     <description>NLULibrary</description>
     <properties>
@@ -93,6 +93,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
