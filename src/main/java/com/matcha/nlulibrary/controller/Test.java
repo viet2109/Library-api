@@ -11,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +22,7 @@ public class Test {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
+
 
     @PostMapping("/login")
     public AuthenticationResponse authenticateUser( @RequestBody AuthenticationRequest loginRequest) {

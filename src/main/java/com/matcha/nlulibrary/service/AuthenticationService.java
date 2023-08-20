@@ -32,7 +32,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("ROLE_USER")
                 .build();
-        System.out.println(user);
+        System.out.println("da tao user: " + user);
         repository.save(user);
 
         String jwtToken = tokenProvider.generateToken(user);

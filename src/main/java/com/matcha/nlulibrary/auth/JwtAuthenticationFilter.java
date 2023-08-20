@@ -47,7 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // lay thong tin nguoi dung tu username
                 UserDetails userDetails = userService.loadUserByUsername(username);
-                System.out.println(username);
                 if (userDetails != null){
                     // neu nguoi dung hop le set thong tin cho Security Context
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
