@@ -3,9 +3,9 @@ spring:
 #    url: jdbc:postgresql://localhost:5432/jwt_security
 #    username: postgres
 #    password: Duyvu.12
-    url: jdbc:postgresql://rain.db.elephantsql.com:5432/ihxrsopk
-    username: ihxrsopk
-    password: xA7dsvddVv80Q7E1tdudLRW1lJQFyUIq
+    url: jdbc:postgresql://rain.db.elephantsql.com:5432/pruynxkf
+    username: pruynxkf
+    password: yufa0VuvO8GBVtscJfw-F4GvAGy2HJp9
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
