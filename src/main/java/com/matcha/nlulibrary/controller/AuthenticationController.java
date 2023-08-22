@@ -1,8 +1,8 @@
 package com.matcha.nlulibrary.controller;
 
-import com.matcha.nlulibrary.auth.AuthenticationRequest;
+import com.matcha.nlulibrary.request.AuthenticationRequest;
 import com.matcha.nlulibrary.auth.AuthenticationResponse;
-import com.matcha.nlulibrary.auth.RegisterRequest;
+import com.matcha.nlulibrary.request.RegisterRequest;
 import com.matcha.nlulibrary.exception.UserAlreadyExistsException;
 import com.matcha.nlulibrary.exception.UserNotExistException;
 import com.matcha.nlulibrary.service.AuthenticationService;

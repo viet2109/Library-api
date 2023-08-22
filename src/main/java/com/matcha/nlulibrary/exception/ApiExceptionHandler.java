@@ -12,38 +12,37 @@ public class ApiExceptionHandler {
     /**
      * Tất cả các Exception không được khai báo sẽ được xử lý tại đây
      */
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorMessage handleAllException(Exception ex, WebRequest request) {
-//        // quá trình kiểm soat lỗi diễn ra ở đây
-//        return new ErrorMessage(10000, ex.getLocalizedMessage());
-//    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorMessage> handleAllException(Exception ex) {
+        // quá trình kiểm soat lỗi diễn ra ở đây
+        return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), ex.getLocalizedMessage()),HttpStatus.NOT_FOUND);
+    }
 
     /**
      * IndexOutOfBoundsException sẽ được xử lý riêng tại đây
      */
-//    @ExceptionHandler(IndexOutOfBoundsException.class)
-//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-//    public ErrorMessage TodoException(Exception ex, WebRequest request) {
-//        return new ErrorMessage(10100, "Đối tượng không tồn tại");
-//    }
-    /**
-     * IndexOutOfBoundsException sẽ được xử lý riêng tại đây
-     */
+    @ExceptionHandler(IndexOutOfBoundsException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ErrorMessage TodoException() {
+        return new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Đối tượng không tồn tại");
+    }
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ErrorMessage> userAlreadyExistsException(UserAlreadyExistsException ex) {
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public ErrorMessage  userAlreadyExistsException(UserAlreadyExistsException ex) {
         ErrorMessage err = new ErrorMessage();
         err.setMessage(ex.getMessage());
         err.setStatusCode(HttpStatus.CONFLICT.value());
 
-        return new ResponseEntity<>(err, HttpStatus.CONFLICT);
+        return err;
     }
     @ExceptionHandler(UserNotExistException.class)
-    public ResponseEntity<ErrorMessage> userNotExistsException(UserNotExistException ex) {
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    public ErrorMessage userNotExistsException(UserNotExistException ex) {
         ErrorMessage err = new ErrorMessage();
         err.setMessage(ex.getMessage());
         err.setStatusCode(HttpStatus.FORBIDDEN.value());
 
-        return new ResponseEntity<>(err, HttpStatus.FORBIDDEN);
+        return err;
     }
 }

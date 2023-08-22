@@ -2,8 +2,8 @@ package com.matcha.nlulibrary.service;
 
 import com.matcha.nlulibrary.auth.AuthenticationResponse;
 import com.matcha.nlulibrary.auth.JwtTokenProvider;
-import com.matcha.nlulibrary.auth.RegisterRequest;
-import com.matcha.nlulibrary.auth.AuthenticationRequest;
+import com.matcha.nlulibrary.request.RegisterRequest;
+import com.matcha.nlulibrary.request.AuthenticationRequest;
 import com.matcha.nlulibrary.dao.UserRepository;
 import com.matcha.nlulibrary.entity.User;
 import lombok.RequiredArgsConstructor;
