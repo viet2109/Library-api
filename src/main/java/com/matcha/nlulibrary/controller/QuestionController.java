@@ -4,6 +4,7 @@ import com.matcha.nlulibrary.entity.Question;
 import com.matcha.nlulibrary.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class QuestionController {
 //        return ResponseEntity.ok(questionService.getQuestionByCategory(category));
 //    }
     @PostMapping("/admin/questions")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Question addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
     }

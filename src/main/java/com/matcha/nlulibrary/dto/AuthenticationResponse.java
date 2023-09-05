@@ -1,15 +1,18 @@
-package com.matcha.nlulibrary.auth;
+package com.matcha.nlulibrary.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.matcha.nlulibrary.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
+    @JsonProperty("data")
+    private User user;
     private String token;
 }

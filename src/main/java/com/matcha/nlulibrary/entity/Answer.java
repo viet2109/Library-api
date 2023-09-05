@@ -16,8 +16,9 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String text;
-    @JsonProperty("is_true")
-    private boolean isTrue;
+//    @JsonIgnore
+    @JsonProperty("is_correct")
+    private boolean isCorrect;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "question_id")

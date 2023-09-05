@@ -1,48 +1,47 @@
 package com.matcha.nlulibrary.exception;
 
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
+
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
-    /**
-     * Tất cả các Exception không được khai báo sẽ được xử lý tại đây
-     */
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorMessage> handleAllException(Exception ex) {
-        // quá trình kiểm soat lỗi diễn ra ở đây
-        return new ResponseEntity<>(new ErrorMessage(HttpStatus.NOT_FOUND.value(), ex.getLocalizedMessage()),HttpStatus.NOT_FOUND);
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorMessage handleBadCredentialsException(BadCredentialsException exception){
+        return ErrorMessage.builder().message(exception.getMessage()).statusCode(HttpStatus.UNAUTHORIZED.value()).build();
     }
 
-    /**
-     * IndexOutOfBoundsException sẽ được xử lý riêng tại đây
-     */
-    @ExceptionHandler(IndexOutOfBoundsException.class)
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ErrorMessage TodoException() {
-        return new ErrorMessage(HttpStatus.NOT_FOUND.value(), "Đối tượng không tồn tại");
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorMessage handleAccessDeniedExceptionException(AccessDeniedException exception){
+        return ErrorMessage.builder().message("Access Denied").statusCode(HttpStatus.FORBIDDEN.value()).build();
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorMessage handleSignatureExceptionException(SignatureException exception){
+        return ErrorMessage.builder().message("Could not decode token: Error while decoding to JSON: Control character error, possibly incorrectly encoded").statusCode(HttpStatus.UNAUTHORIZED.value()).build();
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorMessage handleUsernameNotFoundExceptionException(UsernameNotFoundException exception){
+        return ErrorMessage.builder().message(exception.getMessage()).statusCode(HttpStatus.UNAUTHORIZED.value()).build();
     }
     @ExceptionHandler(UserAlreadyExistsException.class)
-    @ResponseStatus(value = HttpStatus.CONFLICT)
-    public ErrorMessage  userAlreadyExistsException(UserAlreadyExistsException ex) {
-        ErrorMessage err = new ErrorMessage();
-        err.setMessage(ex.getMessage());
-        err.setStatusCode(HttpStatus.CONFLICT.value());
-
-        return err;
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorMessage handleUserAlreadyExistsExceptionException(UserAlreadyExistsException exception){
+        return ErrorMessage.builder().message(exception.getMessage()).statusCode(HttpStatus.CONFLICT.value()).build();
     }
-    @ExceptionHandler(UserNotExistException.class)
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    public ErrorMessage userNotExistsException(UserNotExistException ex) {
-        ErrorMessage err = new ErrorMessage();
-        err.setMessage(ex.getMessage());
-        err.setStatusCode(HttpStatus.FORBIDDEN.value());
 
-        return err;
-    }
+
 }

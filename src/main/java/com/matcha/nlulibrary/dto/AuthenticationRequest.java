@@ -1,4 +1,4 @@
-package com.matcha.nlulibrary.request;
+package com.matcha.nlulibrary.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

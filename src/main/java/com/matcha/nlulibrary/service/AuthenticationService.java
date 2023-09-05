@@ -1,9 +1,10 @@
 package com.matcha.nlulibrary.service;
 
-import com.matcha.nlulibrary.auth.AuthenticationResponse;
+import com.matcha.nlulibrary.dto.AuthenticationResponse;
 import com.matcha.nlulibrary.auth.JwtTokenProvider;
+import com.matcha.nlulibrary.exception.UserAlreadyExistsException;
 import com.matcha.nlulibrary.request.RegisterRequest;
-import com.matcha.nlulibrary.request.AuthenticationRequest;
+import com.matcha.nlulibrary.dto.AuthenticationRequest;
 import com.matcha.nlulibrary.dao.UserRepository;
 import com.matcha.nlulibrary.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +25,10 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final UserService userService;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userService.isExist(request.getEmail())) throw new UserAlreadyExistsException("User " + request.getEmail()+ " đã tồn tại");
         User user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
@@ -38,23 +42,31 @@ public class AuthenticationService {
         String jwtToken = tokenProvider.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .user(user)
                 .build();
     }
     public AuthenticationResponse login (@RequestBody AuthenticationRequest loginRequest){
-        // Xác thực từ username và password.
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-        // Nếu không xảy ra exception tức là thông tin hợp lệ
-        // Set thông tin authentication vào Security Context
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (userService.invalidUser(loginRequest)) throw new UsernameNotFoundException("User không tồn tại");
+        else{
+            // Xác thực từ username và password.
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+            // Nếu không xảy ra exception tức là thông tin hợp lệ
+            // Set thông tin authentication vào Security Context
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // get User vuaf tao
+            User currentUser =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Trả về jwt cho người dùng.
-        String jwt = tokenProvider.generateToken((UserDetails) authentication.getPrincipal());
-        return new AuthenticationResponse(jwt);
+            // Trả về jwt cho người dùng.
+            String jwt = tokenProvider.generateToken((UserDetails) authentication.getPrincipal());
+            return new AuthenticationResponse( currentUser, jwt);
+        }
+
+
     }
 
 

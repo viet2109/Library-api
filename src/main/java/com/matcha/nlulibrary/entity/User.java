@@ -1,5 +1,6 @@
 package com.matcha.nlulibrary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,7 @@ public class User implements UserDetails {
     private String lastname;
     @Column(nullable = false, unique = true)
     private String email;
+    @JsonIgnore
     private String password;
     private String role;
 
