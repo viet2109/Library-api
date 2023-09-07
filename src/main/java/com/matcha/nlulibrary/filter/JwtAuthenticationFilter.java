@@ -1,6 +1,7 @@
 package com.matcha.nlulibrary.filter;
 
 import com.matcha.nlulibrary.auth.JwtTokenProvider;
+import com.matcha.nlulibrary.dao.TokenRepository;
 import com.matcha.nlulibrary.service.UserService;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -33,11 +34,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final UserService userService;
     private final HandlerExceptionResolver resolver;
+    private final TokenRepository tokenRepository;
     @Autowired
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, UserService userService,@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
+    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider,
+                                   UserService userService,
+                                   @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver,
+                                   TokenRepository tokenRepository) {
         this.tokenProvider = tokenProvider;
         this.userService = userService;
         this.resolver = resolver;
+        this.tokenRepository = tokenRepository;
     }
 
     @Override
@@ -66,7 +72,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             if (username != null && SecurityContextHolder.getContext().getAuthentication()==null){
                 UserDetails userDetails = userService.loadUserByUsername(username);
-                if (tokenProvider.validateToken(token, userDetails)){
+                boolean isTokenValid = tokenRepository.findByToken(token).map(token1 -> !token1.isExpired()).orElse(false);
+                if (tokenProvider.validateToken(token, userDetails) && isTokenValid){
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

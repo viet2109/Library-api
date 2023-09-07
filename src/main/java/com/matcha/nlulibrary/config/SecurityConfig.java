@@ -3,6 +3,7 @@ package com.matcha.nlulibrary.config;
 
 
 import com.matcha.nlulibrary.auth.JwtTokenProvider;
+import com.matcha.nlulibrary.dao.TokenRepository;
 import com.matcha.nlulibrary.dao.UserRepository;
 import com.matcha.nlulibrary.filter.JwtAuthenticationFilter;
 import com.matcha.nlulibrary.service.UserService;
@@ -43,9 +44,10 @@ public class SecurityConfig {
     @Qualifier("handlerExceptionResolver")
     @Autowired
     private HandlerExceptionResolver resolver;
+    private final TokenRepository tokenRepository;
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new JwtAuthenticationFilter(tokenProvider, userService, resolver);
+        return new JwtAuthenticationFilter(tokenProvider, userService, resolver, tokenRepository);
     }
     @Bean
     public UserDetailsService userDetailsService(){
