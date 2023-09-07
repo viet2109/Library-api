@@ -1,7 +1,9 @@
 package com.matcha.nlulibrary.service;
 
+import com.matcha.nlulibrary.dao.TokenRepository;
 import com.matcha.nlulibrary.dto.AuthenticationResponse;
 import com.matcha.nlulibrary.auth.JwtTokenProvider;
+import com.matcha.nlulibrary.entity.Token;
 import com.matcha.nlulibrary.exception.UserAlreadyExistsException;
 import com.matcha.nlulibrary.request.RegisterRequest;
 import com.matcha.nlulibrary.dto.AuthenticationRequest;
@@ -18,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -26,6 +30,7 @@ public class AuthenticationService {
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
+    private final TokenRepository tokenRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
         if (userService.isExist(request.getEmail())) throw new UserAlreadyExistsException("User " + request.getEmail()+ " đã tồn tại");
@@ -36,15 +41,17 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("ROLE_USER")
                 .build();
-        System.out.println("da tao user: " + user);
         repository.save(user);
-
         String jwtToken = tokenProvider.generateToken(user);
+        saveUserToken(user, jwtToken);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .user(user)
                 .build();
     }
+
+
+
     public AuthenticationResponse login (@RequestBody AuthenticationRequest loginRequest){
         if (userService.invalidUser(loginRequest)) throw new UsernameNotFoundException("User không tồn tại");
         else{
@@ -63,12 +70,50 @@ public class AuthenticationService {
 
             // Trả về jwt cho người dùng.
             String jwt = tokenProvider.generateToken((UserDetails) authentication.getPrincipal());
+            revokeAllUserToken(currentUser);
+            saveUserToken(currentUser, jwt);
             return new AuthenticationResponse( currentUser, jwt);
         }
 
 
     }
+    public String logout() {
+        // get User vuaf tao
+//        User currentUser =(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(currentUser == null);
+//        if (currentUser == null){
+//            throw new UsernameNotFoundException("The token has been blacklisted");
+//        }else{
+//            revokeAllUserToken(currentUser);
+//            SecurityContextHolder.clearContext();
+//            return "";
+//        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User currentUser = (User) authentication.getPrincipal();
+            // Xử lý đăng xuất ở đây
+            revokeAllUserToken(currentUser);
+            SecurityContextHolder.clearContext();
+            return "";
+        } else {
+            throw new UsernameNotFoundException("The token has been blacklisted");
+        }
 
+
+    }
+    private void revokeAllUserToken(User user){
+        List<Token> validUserTokens = tokenRepository.findAllValidTokensByUser(user.getId());
+        if (validUserTokens.isEmpty()) return;
+        validUserTokens.forEach(token ->{
+            token.setExpired(true);
+        });
+        tokenRepository.saveAll(validUserTokens);
+    }
+    // luu token cua nguoi dung
+    private void saveUserToken(User user, String jwtToken) {
+        Token token = Token.builder().token(jwtToken).expired(false).user(user).build();
+        tokenRepository.save(token);
+    }
 
 
 

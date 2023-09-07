@@ -27,7 +27,7 @@ public class QuestionService {
 
     public List<Question> getAllQuestion(String category) {
         // if the category exist return list based on category
-        System.out.println(category != null);
+
         if (category != null){
             return getQuestionByCategory(category);
         }
