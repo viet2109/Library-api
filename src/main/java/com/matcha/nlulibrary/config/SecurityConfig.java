@@ -22,6 +22,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,8 +42,9 @@ public class SecurityConfig {
     private final UserRepository repository;
     private final JwtTokenProvider tokenProvider;
     private final UserService userService;
-    @Qualifier("handlerExceptionResolver")
+    private final TokenRepository tokenRepository;
     @Autowired
+    @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
     private final TokenRepository tokenRepository;
     @Bean

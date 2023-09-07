@@ -63,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 //                }
 //            }
+            System.out.println("ddax vao jwtFilter");
             String authHeader = request.getHeader("Authorization");
             String token = null;
             String username = null;
@@ -72,6 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             if (username != null && SecurityContextHolder.getContext().getAuthentication()==null){
                 UserDetails userDetails = userService.loadUserByUsername(username);
+
                 boolean isTokenValid = tokenRepository.findByToken(token).map(token1 -> !token1.isExpired()).orElse(false);
                 if (tokenProvider.validateToken(token, userDetails) && isTokenValid){
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
