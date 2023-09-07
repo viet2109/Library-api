@@ -33,8 +33,13 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
     private String role;
+<<<<<<< HEAD
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+=======
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 
+>>>>>>> 345ae5b579fd399a77015b0324c81e1075eb9e59
     private List<Token> tokens;
 
     @Override
