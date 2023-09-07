@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -23,15 +24,22 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String firstname;
-    private String lastname;
+    private String name;
     @Column(nullable = false, unique = true)
     private String email;
+    private String className;
+    private String school;
+    private Date dob;
     @JsonIgnore
     private String password;
     private String role;
+<<<<<<< HEAD
     @JsonIgnore
     @OneToMany(mappedBy = "user")
+=======
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+
+>>>>>>> 345ae5b579fd399a77015b0324c81e1075eb9e59
     private List<Token> tokens;
 
     @Override
@@ -40,26 +48,31 @@ public class User implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return email;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

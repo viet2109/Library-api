@@ -20,7 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+import java.text.SimpleDateFormat;
+>>>>>>> 345ae5b579fd399a77015b0324c81e1075eb9e59
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +39,10 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         if (userService.isExist(request.getEmail())) throw new UserAlreadyExistsException("User " + request.getEmail()+ " đã tồn tại");
         User user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
+                .className(request.getClassName())
+                .dob(request.getDob())
+                .school(request.getSchool())
+                .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("ROLE_USER")
