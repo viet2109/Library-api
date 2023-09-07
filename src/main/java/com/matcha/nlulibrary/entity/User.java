@@ -30,6 +30,8 @@ public class User implements UserDetails {
     @JsonIgnore
     private String password;
     private String role;
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
