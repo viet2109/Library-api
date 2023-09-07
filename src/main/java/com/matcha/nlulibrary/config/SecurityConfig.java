@@ -46,7 +46,6 @@ public class SecurityConfig {
     @Autowired
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
-    private final TokenRepository tokenRepository;
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(){
         return new JwtAuthenticationFilter(tokenProvider, userService, resolver, tokenRepository);
