@@ -31,18 +31,11 @@ public class QuestionController {
     }
 
 
-//    @GetMapping("/category/{category}")
-//    public ResponseEntity<List<QuestionDTO>> getQuestionByCategory(@PathVariable String category){
-//        return ResponseEntity.ok(questionService.getQuestionByCategory(category));
-//    }
     @PostMapping("/admin/questions")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Question addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
     }
-    // api to check question
-//    @PostMapping("/answer")
-//    public ResponseEntity<>
 
 
 }
