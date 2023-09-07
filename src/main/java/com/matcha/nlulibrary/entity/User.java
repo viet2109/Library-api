@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private Date dob;
     @JsonIgnore
     private String password;
+    @JsonIgnore
     private String role;
 
     @JsonIgnore
@@ -41,6 +42,7 @@ public class User implements UserDetails {
     private List<Token> tokens;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
