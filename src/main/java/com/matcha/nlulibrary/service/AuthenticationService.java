@@ -1,14 +1,16 @@
 package com.matcha.nlulibrary.service;
 
-import com.matcha.nlulibrary.dao.TokenRepository;
-import com.matcha.nlulibrary.dto.AuthenticationResponse;
+
 import com.matcha.nlulibrary.auth.JwtTokenProvider;
+import com.matcha.nlulibrary.dao.TokenRepository;
+
+import com.matcha.nlulibrary.dao.UserRepository;
+import com.matcha.nlulibrary.dto.AuthenticationRequest;
+import com.matcha.nlulibrary.dto.AuthenticationResponse;
 import com.matcha.nlulibrary.entity.Token;
+import com.matcha.nlulibrary.entity.User;
 import com.matcha.nlulibrary.exception.UserAlreadyExistsException;
 import com.matcha.nlulibrary.request.RegisterRequest;
-import com.matcha.nlulibrary.dto.AuthenticationRequest;
-import com.matcha.nlulibrary.dao.UserRepository;
-import com.matcha.nlulibrary.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +21,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-
-<<<<<<< HEAD
 import java.util.List;
-=======
-import java.text.SimpleDateFormat;
->>>>>>> 345ae5b579fd399a77015b0324c81e1075eb9e59
+
 
 @Service
 @RequiredArgsConstructor
