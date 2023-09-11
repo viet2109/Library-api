@@ -2,6 +2,7 @@ package com.matcha.nlulibrary.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -34,12 +35,16 @@ public class JwtTokenProvider {
     }
     // Lấy thông tin user từ jwt
     public String getUserNameFromJwt(String token){
+        try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(getSignKey())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
             return claims.getSubject();
+        } catch (MalformedJwtException e) {
+            throw new MalformedJwtException("Invalid token");
+        }
     }
     public boolean validateToken(String authToken, UserDetails userDetails) {
         final String userName = getUserNameFromJwt(authToken);

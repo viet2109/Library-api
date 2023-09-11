@@ -1,5 +1,6 @@
 package com.matcha.nlulibrary.exception;
 
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -41,6 +42,12 @@ public class ApiExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorMessage handleUserAlreadyExistsExceptionException(UserAlreadyExistsException exception){
         return ErrorMessage.builder().message(exception.getMessage()).statusCode(HttpStatus.CONFLICT.value()).build();
+    }
+
+    @ExceptionHandler(MalformedJwtException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorMessage handleMalformedJwtException(MalformedJwtException exception){
+        return ErrorMessage.builder().message(exception.getMessage()).statusCode(HttpStatus.BAD_REQUEST.value()).build();
     }
 
 

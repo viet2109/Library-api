@@ -63,14 +63,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 //                }
 //            }
-            System.out.println("ddax vao jwtFilter");
             String authHeader = request.getHeader("Authorization");
             String token = null;
             String username = null;
+            System.out.println("da vao filter");
             if(authHeader != null && authHeader.startsWith("Bearer ")){
+
                 token = authHeader.substring(7);
                 username = tokenProvider.getUserNameFromJwt(token);
+                System.out.println("user name: " + username);
             }
+
             if (username != null && SecurityContextHolder.getContext().getAuthentication()==null){
                 UserDetails userDetails = userService.loadUserByUsername(username);
 
@@ -83,7 +86,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         }catch (Exception ex) {
+            System.out.println("loi");
             resolver.resolveException(request,response,null,ex);
+
         }
 
 

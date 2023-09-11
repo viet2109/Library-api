@@ -93,7 +93,7 @@ public class AuthenticationService {
 //            return "";
 //        }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
+        if (authentication != null && authentication.getPrincipal() instanceof User ) {
             User currentUser = (User) authentication.getPrincipal();
             // Xử lý đăng xuất ở đây
             revokeAllUserToken(currentUser);

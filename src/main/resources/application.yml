@@ -17,3 +17,10 @@ spring:
 #        format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Iv1.1fe17cfbf43477f4
+            client-secret: 0ce8177b94b4d4134becfed3c16c86b920ad0234

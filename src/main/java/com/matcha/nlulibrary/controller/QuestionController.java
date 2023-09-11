@@ -36,6 +36,10 @@ public class QuestionController {
     public Question addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
     }
+    @GetMapping("/auth/test")
+    public ResponseEntity<String> test(@PathVariable int id){
+        return ResponseEntity.ok("test");
 
+    }
 
 }
